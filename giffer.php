@@ -40,6 +40,8 @@ class Giffer {
         $path = explode("\\", $this->saveDirectoryPath);
         unset($path[count($path) - 1]);
         $this->pathOfSaveFrames = implode("\\", $path);
+        $this->saveFramePath = $this->saveFramePath . "\\";
+        echo $this->pathOfSaveFrames;
     }
 // функция разбивки на фрэймы
     public function getFramesOfGif () {
@@ -53,7 +55,7 @@ class Giffer {
     }
 // функция добавления водяного знака и изменения размера фрэйма
     public function addWaterMarkInFrame () {
-        $framesDir = $this->pathOfSaveFrames . "frames/";
+        $framesDir = $this->pathOfSaveFrames . "\\frames/";
         $frames = scandir($framesDir);
         $this->loadPng($this->watermarkPath, 80, 40);
 
@@ -72,7 +74,7 @@ class Giffer {
 
     // функция склеивания фрэймов в цельный gif
     public function makeNewGif () {
-        $framesDir = $this->pathOfSaveFrames . "frames/";
+        $framesDir = $this->pathOfSaveFrames . "/frames/";
         $frames = scandir($framesDir);
         for($i = 0; $i < count($frames) - 3; $i++) {
             $frame = new Imagick($framesDir . "frame{$i}.gif");
@@ -82,7 +84,7 @@ class Giffer {
             unlink($framesDir . "frame{$i}.gif");
         }
 
-        unlink($this->pathOfSaveFrames . "frames" . "/watermark.png");
+        unlink($this->pathOfSaveFrames . "\\frames" . "/watermark.png");
         rmdir($this->pathOfSaveFrames . "/frames");
         $this->newGifFile->setFormat("gif");
         $this->newGifFile->writeImages($this->saveDirectoryPath, true);
