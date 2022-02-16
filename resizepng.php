@@ -113,8 +113,8 @@ class Image {
 
 
     //header("Content-type: image/png");
-    $image = new Image("cat2.png");
+    $image = new Image("watermark.png");
     $image->setResizeType("fit");
-    $image->setHeight(1000);
+    $image->setHeight(300);
     //$image->showImg();
     $image->process("cat2resize.png");
