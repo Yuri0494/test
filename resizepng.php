@@ -13,8 +13,6 @@ class Image {
         $this->coefficient = $this->width / $this->height;
         //переписать :)
         $this->newPng = imagecreatetruecolor($this->width, $this->height);
-        imagealphablending($this->newPng, false);
-        imagesavealpha($this->newPng, true);
         imagecopyresized($this->newPng, $this->basicPng, 0, 0, 0, 0, $this->width, $this->height,  $this->width, $this->height);
     }
 
