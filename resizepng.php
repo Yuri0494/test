@@ -3,7 +3,7 @@
 class Image {
 
     public function __construct ($path) {
-        $this->basicPng = imagecreatefromPng($path);
+        $this->basicPng = imagecreatefrompng($path);
         $this->type = "force";
         $this->types = ["force", "fill", "fit"];
         $this->width = imagesx($this->basicPng);
