@@ -11,26 +11,28 @@ class Image {
         $this->setHeight = $this->height;
         $this->setWidth = $this->width;
         $this->coefficient = $this->width / $this->height;
+        //переписать :)
         $this->newPng = imagecreatetruecolor($this->width, $this->height);
         imagealphablending($this->newPng, false);
         imagesavealpha($this->newPng, true);
         imagecopyresized($this->newPng, $this->basicPng, 0, 0, 0, 0, $this->width, $this->height,  $this->width, $this->height);
     }
 
-
+// функция корректировки цветов после ресайза
     private function alphaBlend ($i) {
         imagealphablending($i, false);
         imagesavealpha($i, true);
     }
-
+// функция ресайза по ширине
     public function setWidth ($width) {
+        // если значение не задано, берем значение высоты картинки
         if($width === 0 || false) {
             $this->setWidth = $this->height;
         } else {
             $this->setWidth = $width;
         }
         
-
+// Проверка на тип ресайза. По умолчанию "force"
         Switch ($this->type) {
             case "force": {
                 $this->newPng = imagecreatetruecolor($this->setWidth, $this->setHeight);
@@ -55,15 +57,15 @@ class Image {
         }
         
     }
-
+// функция ресайза по высоте
     public function setHeight ($height) {
-
+// если значение не задано, берем значение ширины картинки
         if($height === 0 || false) {
             $this->setHeight = $this->width;
         } else {
             $this->setHeight = $height;
         }
-
+// Проверка на тип ресайза. По умолчанию "force"
         Switch ($this->type) {
 
             case "force": {
@@ -91,19 +93,19 @@ class Image {
         
         
     }
-
+// Функция установки типа ресайза. Проверяет на соответствие с вариантами ресайза в массиве
     public function setResizeType ($type) {
         if(in_array($type, $this->types)) {
             $this->type = $type;
         } else {
-            echo "error";
+            $this->type = "force";
         }
     }
-
+// Функция вывода в браузер 
     public function showImg () {
         imagepng($this->newPng);
     }
-
+// Функция сохранения изображения по определенному пути
     public function process ($outPath) {
         imagepng($this->newPng, $outPath);
         imagedestroy($this->newPng);
