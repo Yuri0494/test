@@ -11,9 +11,7 @@ class Image {
         $this->setHeight = $this->height;
         $this->setWidth = $this->width;
         $this->coefficient = $this->width / $this->height;
-        //переписать :)
         $this->newPng = imagecreatetruecolor($this->width, $this->height);
-        imagecopyresized($this->newPng, $this->basicPng, 0, 0, 0, 0, $this->width, $this->height,  $this->width, $this->height);
     }
 
 // функция корректировки цветов после ресайза
@@ -21,6 +19,14 @@ class Image {
         imagealphablending($i, false);
         imagesavealpha($i, true);
     }
+
+
+// функция заливки фона
+    function assignColor ($i, $red, $green, $blue) {
+        $color = imagecolorallocatealpha($i, $red, $green, $blue, false);
+        imagefill($i, 0, 0, $color);
+    }
+
 // функция ресайза по ширине
     public function setWidth ($width) {
         // если значение не задано, берем значение высоты картинки
@@ -42,13 +48,16 @@ class Image {
             case "fit": {
                 $this->newPng = imagecreatetruecolor($this->setWidth, $this->setWidth / $this->coefficient);
                 $this->alphaBlend ($this->newPng);
-                imagecopyresized($this->newPng, $this->basicPng, 0, 0, 0, 0,  $this->setWidth, $this->setWidth / $this->coefficient, $this->width, $this->height);
+                $this->setHeight = $this->setWidth / $this->coefficient;
+                imagecopyresized($this->newPng, $this->basicPng, 0, 0, 0, 0,  $this->setWidth, $this->setHeight, $this->width, $this->height);
                 break;
             }
 
             case "fill": {
-                $this->newPng = imagecreatetruecolor($this->setWidth, $this->setWidth / $this->coefficient);
+                $this->setHeight = $this->setWidth / $this->coefficient;
+                $this->newPng = imagecreatetruecolor($this->setWidth, $this->setHeight);
                 $this->alphaBlend ($this->newPng);
+                $this->assignColor($this->newPng, 255, 255, 255);
                 imagecopyresized($this->newPng, $this->basicPng, 0, 0, 0, 0,  $this->width, $this->height, $this->width, $this->height);
                 break;
             }
@@ -83,6 +92,7 @@ class Image {
             case "fill": {
                 $this->newPng = imagecreatetruecolor($this->setHeight * $this->coefficient, $this->setHeight);
                 $this->alphaBlend ($this->newPng);
+                $this->assignColor($this->newPng, 255, 255, 255);
                 imagecopyresized($this->newPng, $this->basicPng, 0, 0, 0, 0,  $this->width, $this->height, $this->width, $this->height);
                 break;
             }
@@ -112,9 +122,9 @@ class Image {
     }
 
 
-    //header("Content-type: image/png");
+   // header("Content-type: image/png");
     $image = new Image("watermark.png");
-    $image->setResizeType("fit");
-    $image->setHeight(300);
-    //$image->showImg();
+    $image->setResizeType("fill");
+    $image->setHeight(3000);
+   // $image->showImg();
     $image->process("cat2resize.png");
